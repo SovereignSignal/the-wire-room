@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import {
   ArrowRight,
@@ -8,6 +8,7 @@ import {
   Clock,
   DollarSign,
   Calendar,
+  Loader2,
 } from "lucide-react"
 import {
   SAMPLE_WIRES,
@@ -82,11 +83,32 @@ function WireCard({ item }: { item: WireItem }) {
 
 export function LatestWires() {
   const [filter, setFilter] = useState<BeatFilter>("all")
+  const [wires, setWires] = useState<WireItem[]>(SAMPLE_WIRES)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchWires() {
+      try {
+        const response = await fetch("/api/wires?limit=20")
+        if (response.ok) {
+          const data = await response.json()
+          if (data.wires && data.wires.length > 0) {
+            setWires(data.wires)
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch wires:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchWires()
+  }, [])
 
   const filteredWires =
     filter === "all"
-      ? SAMPLE_WIRES.slice(0, 6)
-      : SAMPLE_WIRES.filter((w) => w.beat === filter).slice(0, 6)
+      ? wires.slice(0, 6)
+      : wires.filter((w) => w.beat === filter).slice(0, 6)
 
   const filters: { value: BeatFilter; label: string }[] = [
     { value: "all", label: "All Wires" },
@@ -137,7 +159,11 @@ export function LatestWires() {
         {/* Wire list */}
         <div className="rounded-lg border border-border bg-card">
           <div className="px-5">
-            {filteredWires.length > 0 ? (
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : filteredWires.length > 0 ? (
               filteredWires.map((item) => (
                 <WireCard key={item.id} item={item} />
               ))

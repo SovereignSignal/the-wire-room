@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server"
 import { Pool } from "pg"
 
+// Serverless-friendly pool configuration
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  max: 1, // Limit connections in serverless
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 5000,
+})
+
+// Graceful connection handling
+pool.on("error", (err) => {
+  console.error("Unexpected database error:", err)
 })
 
 export async function GET(request: Request) {
@@ -45,6 +54,8 @@ export async function GET(request: Request) {
       summary: extractSummary(row.raw_content),
       beat: row.wire as "crypto" | "ai" | "oss",
       category: detectCategory(row.raw_content),
+      amount: extractAmount(row.raw_content),
+      deadline: extractDeadline(row.raw_content),
       sourceUrl: row.extracted_urls?.[0] || "",
       sourceName: extractSourceName(row.raw_content),
       tier: 1, // All TeleSum items are verified
@@ -99,4 +110,40 @@ function extractSourceName(content: string): string {
     if (match) return match[1]
   }
   return "Wire Room"
+}
+
+function extractAmount(content: string): string | undefined {
+  // Look for dollar amounts
+  const patterns = [
+    /\$[\d,]+(?:\.\d+)?(?:\s*[KMB])?(?:\s*(?:million|billion))?/i,
+    /(\d+(?:,\d+)*)\s*(?:USD|USDC|DAI)/i,
+    /up\s+to\s+\$[\d,]+/i,
+  ]
+  for (const pattern of patterns) {
+    const match = content.match(pattern)
+    if (match) return match[0]
+  }
+  return undefined
+}
+
+function extractDeadline(content: string): string | undefined {
+  // Look for deadline dates
+  const patterns = [
+    /deadline[:\s]+([A-Za-z]+\s+\d{1,2}(?:,?\s+\d{4})?)/i,
+    /(?:by|before|due)[:\s]+([A-Za-z]+\s+\d{1,2}(?:,?\s+\d{4})?)/i,
+    /(\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s+\d{4})/i,
+    /([A-Za-z]+\s+\d{1,2},?\s+\d{4})/i,
+  ]
+  for (const pattern of patterns) {
+    const match = content.match(pattern)
+    if (match) {
+      // Try to parse the date
+      const parsed = new Date(match[1])
+      if (!isNaN(parsed.getTime())) {
+        return parsed.toISOString().split("T")[0]
+      }
+      return match[1]
+    }
+  }
+  return undefined
 }

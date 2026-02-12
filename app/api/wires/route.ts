@@ -7,6 +7,7 @@ const pool = new Pool({
   max: 1, // Limit connections in serverless
   idleTimeoutMillis: 10000,
   connectionTimeoutMillis: 5000,
+  ssl: process.env.DATABASE_URL?.includes('railway') ? { rejectUnauthorized: false } : false,
 })
 
 // Graceful connection handling
@@ -66,7 +67,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ wires, total: result.rowCount })
   } catch (error) {
     console.error("Database error:", error)
-    return NextResponse.json({ error: "Failed to fetch wires" }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : "Unknown error"
+    return NextResponse.json({ 
+      error: "Failed to fetch wires", 
+      details: errorMessage,
+      hasDbUrl: !!process.env.DATABASE_URL 
+    }, { status: 500 })
   }
 }
 

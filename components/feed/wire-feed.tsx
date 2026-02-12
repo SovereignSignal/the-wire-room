@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import {
   Search,
   ArrowUpRight,
@@ -10,6 +10,7 @@ import {
   Radio,
   Send,
   Filter,
+  Loader2,
 } from "lucide-react"
 import {
   SAMPLE_WIRES,
@@ -101,21 +102,43 @@ export function WireFeed() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)
+  const [wires, setWires] = useState<WireItem[]>(SAMPLE_WIRES) // Start with sample, replace with API
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchWires() {
+      try {
+        const response = await fetch("/api/wires?limit=50")
+        if (response.ok) {
+          const data = await response.json()
+          if (data.wires && data.wires.length > 0) {
+            setWires(data.wires)
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch wires:", error)
+        // Keep sample data on error
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchWires()
+  }, [])
 
   const filteredWires = useMemo(() => {
-    let wires = SAMPLE_WIRES
+    let filtered = wires
 
     if (beatFilter !== "all") {
-      wires = wires.filter((w) => w.beat === beatFilter)
+      filtered = filtered.filter((w) => w.beat === beatFilter)
     }
 
     if (categoryFilter !== "all") {
-      wires = wires.filter((w) => w.category === categoryFilter)
+      filtered = filtered.filter((w) => w.category === categoryFilter)
     }
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase()
-      wires = wires.filter(
+      filtered = filtered.filter(
         (w) =>
           w.title.toLowerCase().includes(q) ||
           w.summary.toLowerCase().includes(q) ||
@@ -123,8 +146,8 @@ export function WireFeed() {
       )
     }
 
-    return wires
-  }, [beatFilter, categoryFilter, searchQuery])
+    return filtered
+  }, [wires, beatFilter, categoryFilter, searchQuery])
 
   const beatFilters: { value: BeatFilter; label: string }[] = [
     { value: "all", label: "All" },
@@ -247,7 +270,14 @@ export function WireFeed() {
 
         {/* Feed */}
         <div className="rounded-lg border border-border bg-card">
-          {filteredWires.length > 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center gap-3 py-16">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              <p className="font-mono text-sm text-muted-foreground">
+                Loading wires...
+              </p>
+            </div>
+          ) : filteredWires.length > 0 ? (
             filteredWires.map((item) => (
               <FeedItem key={item.id} item={item} />
             ))

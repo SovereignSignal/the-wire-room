@@ -86,7 +86,9 @@ export async function GET(request: Request) {
       title: row.summary_title || extractTitle(row.raw_content || ""),
       summary: row.summary_text || extractSummary(row.raw_content || ""),
       beat: row.wire as "crypto" | "ai" | "oss",
-      category: detectCategory(row.raw_content || ""),
+      category: detectCategory(
+        (row.summary_title || "") + " " + (row.summary_text || "") + " " + (row.raw_content || "")
+      ),
       amount: extractAmount(row.raw_content || ""),
       deadline: extractDeadline(row.raw_content || ""),
       sourceUrl: row.extracted_urls?.[0] || "",
@@ -135,10 +137,46 @@ function mapCategory(category: string | null): "grants" | "fellowship" | "hackat
 
 function detectCategory(content: string): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" {
   const lower = content.toLowerCase()
-  if (lower.includes("fellowship")) return "fellowship"
-  if (lower.includes("hackathon")) return "hackathon"
-  if (lower.includes("governance") || lower.includes("proposal") || lower.includes("vote")) return "governance"
-  if (lower.includes("incentive") || lower.includes("rewards")) return "incentives"
+
+  // Hackathon detection (check before grants since hackathons may also mention "prizes")
+  if (
+    lower.includes("hackathon") ||
+    lower.includes("hack week") ||
+    lower.includes("buildathon") ||
+    lower.includes("code jam") ||
+    (lower.includes("competition") && lower.includes("prize"))
+  ) return "hackathon"
+
+  // Fellowship detection
+  if (
+    lower.includes("fellowship") ||
+    lower.includes("residency") ||
+    lower.includes("scholar")
+  ) return "fellowship"
+
+  // Governance detection
+  if (
+    lower.includes("governance") ||
+    lower.includes("treasury") ||
+    (lower.includes("proposal") && (lower.includes("dao") || lower.includes("vote"))) ||
+    lower.includes("snapshot") ||
+    lower.includes("tally")
+  ) return "governance"
+
+  // Incentives detection
+  if (
+    lower.includes("incentive") ||
+    lower.includes("rewards program") ||
+    lower.includes("bounty") ||
+    lower.includes("bounties") ||
+    lower.includes("airdrop") ||
+    lower.includes("testnet reward") ||
+    lower.includes("incentivized testnet") ||
+    lower.includes("builders program") ||
+    lower.includes("sponsorship")
+  ) return "incentives"
+
+  // Default: grants (covers grant, funding, RFP, etc.)
   return "grants"
 }
 

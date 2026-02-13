@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "The Wire Room",
   description:
-    "Three beats. One team. Non-stop coverage. Tracking grants, fellowships, and funding across Crypto, AI, and Open Source.",
+    "Three beats. Real-time grants intelligence. Tracking grants, fellowships, and funding across Crypto, AI, and Open Source.",
   generator: "v0.app",
 }
 

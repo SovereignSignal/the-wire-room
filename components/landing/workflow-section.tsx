@@ -1,33 +1,33 @@
-import { Search, ShieldCheck, PenTool, Send, ArrowDown } from "lucide-react"
+import { Radar, Filter, FileText, Send, ArrowDown } from "lucide-react"
 
 const STEPS = [
   {
-    icon: Search,
-    role: "Stringer",
-    action: "Finds",
+    icon: Radar,
+    step: "Scan",
+    action: "Monitor",
     description:
-      "Scouts surface grants, fellowships, and hackathons from across the ecosystem. They're the eyes and ears on the ground.",
+      "AI-assisted monitoring of grant announcements across all three ecosystems using action language search methodology.",
   },
   {
-    icon: ShieldCheck,
-    role: "Fact Checker",
-    action: "Verifies",
+    icon: Filter,
+    step: "Filter",
+    action: "Verify",
     description:
-      "Every tip gets verified against primary sources. We check amounts, deadlines, eligibility, and legitimacy before anything hits the wire.",
+      "Every result passes through a 5-point verification filter: named program, on beat, actionable details, primary source, and deadline clarity.",
   },
   {
-    icon: PenTool,
-    role: "Staff Writer",
-    action: "Shapes",
+    icon: FileText,
+    step: "Write",
+    action: "Format",
     description:
-      "Raw intel becomes a clear, actionable wire brief. Our house style keeps every post scannable and useful.",
+      "Verified opportunities formatted into clear, scannable wire briefs following house style guidelines.",
   },
   {
     icon: Send,
-    role: "Press Operator",
-    action: "Publishes",
+    step: "Publish",
+    action: "Distribute",
     description:
-      "The final wire goes out across X, Telegram, and the feed. Timed for maximum reach and relevance.",
+      "Wires distributed across Telegram channels, X accounts, and the live feed. Timed for maximum reach.",
   },
 ]
 
@@ -40,8 +40,8 @@ export function WorkflowSection() {
             <span className="text-balance">How the Wire Works</span>
           </h2>
           <p className="mt-3 max-w-xl text-base text-muted-foreground">
-            Every wire passes through our editorial pipeline. No rumor, no
-            noise, no spam -- just verified, actionable intelligence.
+            Every wire passes through a four-stage pipeline. No rumor, no
+            noise, no spam — just verified, actionable intelligence.
           </p>
         </div>
 
@@ -49,7 +49,7 @@ export function WorkflowSection() {
           {STEPS.map((step, i) => {
             const Icon = step.icon
             return (
-              <div key={step.role} className="relative">
+              <div key={step.step} className="relative">
                 <div className="flex flex-col items-start">
                   {/* Step number */}
                   <span className="mb-3 font-mono text-xs text-muted-foreground">
@@ -59,7 +59,7 @@ export function WorkflowSection() {
                     <Icon className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="font-serif text-lg font-bold text-foreground">
-                    {step.role}
+                    {step.step}
                   </h3>
                   <span className="mt-0.5 font-mono text-xs uppercase tracking-wider text-primary">
                     {step.action}

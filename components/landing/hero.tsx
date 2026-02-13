@@ -24,7 +24,7 @@ export function Hero() {
         </h1>
 
         <p className="mt-4 font-mono text-sm uppercase tracking-widest text-muted-foreground md:text-base">
-          Three beats. One team. Non-stop coverage.
+          Three beats. Real-time grants intelligence.
         </p>
 
         <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
@@ -44,7 +44,7 @@ export function Hero() {
             href="/about"
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-border bg-secondary px-6 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
           >
-            Join the Room
+            How It Works
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

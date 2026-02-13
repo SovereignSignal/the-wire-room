@@ -20,7 +20,7 @@ export function NewsletterSection() {
               <span className="text-balance">Get the Dispatch</span>
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
-              Weekly Wire dispatches, thought leadership on grants and funding,
+              Weekly wire dispatches, analysis of where funding flows,
               and ideas on technology and innovation. No spam. Just signal.
             </p>
 

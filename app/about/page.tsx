@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import {
-  Search,
-  ShieldCheck,
-  PenTool,
+  Radar,
+  Filter,
+  FileText,
   Send,
   CheckCircle2,
   XCircle,
@@ -15,7 +15,7 @@ import {
 export const metadata: Metadata = {
   title: "Operating Manual | The Wire Room",
   description:
-    "How The Wire Room works: our editorial process, source tiers, team structure, and house style.",
+    "How The Wire Room works: our methodology, source tiers, verification process, and house style.",
 }
 
 export default function AboutPage() {
@@ -35,9 +35,10 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg">
-              The Wire Room is a digital newsroom that tracks non-dilutive
-              funding across three beats: Crypto, AI, and Open Source. This
-              manual covers what we do, how we do it, and why it matters.
+              The Wire Room is a grants intelligence wire service that tracks
+              non-dilutive funding across three beats: Crypto, AI, and Open Source.
+              Operated by Sovereign Signal, powered by human curation and AI-assisted
+              scanning. This manual covers what we do, how we do it, and why it matters.
             </p>
           </div>
         </section>
@@ -92,48 +93,48 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Team Structure */}
+        {/* The Process */}
         <section className="border-b border-border py-12 md:py-16">
           <div className="mx-auto max-w-3xl px-4">
             <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">
-              The Team
+              The Process
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              Every wire passes through a structured editorial pipeline. Each
-              role has clear responsibilities and handoff protocols.
+              Every wire passes through a four-stage pipeline. No rumor, no noise,
+              no spam — just verified, actionable intelligence.
             </p>
 
             <div className="mt-8 flex flex-col gap-6">
               {[
                 {
-                  icon: Search,
-                  role: "Stringer",
+                  icon: Radar,
+                  step: "Scan",
                   description:
-                    "Scouts and tipsters who surface raw leads from across the ecosystem. They monitor governance forums, foundation announcements, social media, and community channels. Stringers file tips with source links and initial context.",
+                    "AI-assisted monitoring of grant announcements across all three ecosystems. We use action language search methodology to surface opportunities from governance forums, foundation blogs, social media, and official channels.",
                 },
                 {
-                  icon: ShieldCheck,
-                  role: "Fact Checker",
+                  icon: Filter,
+                  step: "Filter",
                   description:
-                    "Verifies every tip against primary sources. Checks amounts, deadlines, eligibility criteria, and legitimacy. Assigns source tiers and flags any red flags. Nothing hits the wire without fact-check sign-off.",
+                    "Every result passes through a 5-point verification filter: named program, on beat, actionable details, primary source quality, and deadline clarity. This eliminates noise and ensures only legitimate opportunities make it through.",
                 },
                 {
-                  icon: PenTool,
-                  role: "Staff Writer",
+                  icon: FileText,
+                  step: "Write",
                   description:
-                    "Transforms verified intel into clear, scannable wire briefs following house style. Writes headlines, summaries, and ensures consistent formatting. Maintains the editorial voice across all three beats.",
+                    "Verified opportunities are formatted into clear, scannable wire briefs following house style guidelines. Each wire includes the key details: amount, deadline, eligibility, and a direct link to apply.",
                 },
                 {
                   icon: Send,
-                  role: "Press Operator",
+                  step: "Publish",
                   description:
-                    "Handles final publication across X, Telegram, and the wire feed. Manages scheduling, audience timing, and cross-platform formatting. Monitors engagement and community response.",
+                    "Final wires are distributed across Telegram channels, X accounts, and the live feed. Timing is optimized for maximum reach across different time zones and audiences.",
                 },
-              ].map((member) => {
-                const Icon = member.icon
+              ].map((item) => {
+                const Icon = item.icon
                 return (
                   <div
-                    key={member.role}
+                    key={item.step}
                     className="flex gap-4 rounded-lg border border-border bg-card p-5"
                   >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
@@ -141,10 +142,10 @@ export default function AboutPage() {
                     </div>
                     <div>
                       <h3 className="font-serif text-lg font-bold text-foreground">
-                        {member.role}
+                        {item.step}
                       </h3>
                       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                        {member.description}
+                        {item.description}
                       </p>
                     </div>
                   </div>

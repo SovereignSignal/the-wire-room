@@ -36,7 +36,7 @@ export function BeatsSection() {
             <span className="text-balance">The Three Beats</span>
           </h2>
           <p className="mt-3 max-w-xl text-base text-muted-foreground">
-            Each beat has its own wire, its own stringers, and its own audience.
+            Each beat has dedicated coverage, dedicated channels, and a dedicated audience.
             Together they form a complete picture of non-dilutive funding.
           </p>
         </div>

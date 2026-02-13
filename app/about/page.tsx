@@ -155,64 +155,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-
-        {/* House Style */}
-        <section className="border-b border-border py-12 md:py-16">
-          <div className="mx-auto max-w-3xl px-4">
-            <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">
-              House Style
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              Every wire follows a consistent format to maximize scannability
-              and usefulness.
-            </p>
-
-            <div className="mt-8 rounded-lg border border-border bg-card p-5">
-              <div className="flex flex-col gap-4">
-                {[
-                  {
-                    rule: "Lead with the number",
-                    example:
-                      "Always put the funding amount in the first sentence when available.",
-                  },
-                  {
-                    rule: "Include the deadline",
-                    example:
-                      "Every wire with an application deadline includes the date prominently.",
-                  },
-                  {
-                    rule: "Link to primary source",
-                    example:
-                      "Every wire includes a direct link to the official announcement or application page.",
-                  },
-                  {
-                    rule: "Keep it actionable",
-                    example:
-                      "Tell readers what the opportunity is, who it's for, and how to apply — in three sentences or fewer.",
-                  },
-                  {
-                    rule: "No editorializing",
-                    example:
-                      "Report the facts. Save opinions for the Dispatch analysis section.",
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.rule}
-                    className="border-b border-border pb-4 last:border-b-0 last:pb-0"
-                  >
-                    <h4 className="font-mono text-sm font-semibold text-foreground">
-                      {item.rule}
-                    </h4>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {item.example}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Contact */}
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-3xl px-4">

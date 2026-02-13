@@ -238,7 +238,7 @@ export default function AboutPage() {
                   {
                     rule: "No editorializing",
                     example:
-                      "Report the facts. Save opinions for the Friday Dispatch analysis section.",
+                      "Report the facts. Save opinions for the Dispatch analysis section.",
                   },
                 ].map((item) => (
                   <div

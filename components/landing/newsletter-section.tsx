@@ -1,21 +1,9 @@
-"use client"
+import { Mail, ArrowUpRight } from "lucide-react"
 
-import React from "react"
-
-import { useState } from "react"
-import { Mail, CheckCircle2 } from "lucide-react"
+const SUBSTACK_URL = "https://sovereignsignal.substack.com"
+const SUBSCRIBE_URL = `${SUBSTACK_URL}/subscribe`
 
 export function NewsletterSection() {
-  const [email, setEmail] = useState("")
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (email.trim()) {
-      setSubmitted(true)
-    }
-  }
-
   return (
     <section className="py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-4">
@@ -29,44 +17,36 @@ export function NewsletterSection() {
             </div>
 
             <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">
-              <span className="text-balance">Get the Friday Dispatch</span>
+              <span className="text-balance">Get the Dispatch</span>
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
-              A weekly digest of the best grants, fellowships, and hackathons
-              across all three beats. No spam. Just signal.
+              Weekly Wire dispatches, thought leadership on grants and funding,
+              and ideas on technology and innovation. No spam. Just signal.
             </p>
 
-            {submitted ? (
-              <div className="mt-8 flex items-center justify-center gap-2 text-primary">
-                <CheckCircle2 className="h-5 w-5" />
-                <span className="font-mono text-sm font-medium">
-                  You&apos;re on the wire. First dispatch incoming.
-                </span>
-              </div>
-            ) : (
-              <form
-                onSubmit={handleSubmit}
-                className="mt-8 flex flex-col gap-3 sm:flex-row"
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <a
+                href={SUBSCRIBE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-8 font-mono text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="h-12 flex-1 rounded-md border border-border bg-secondary px-4 text-base text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <button
-                  type="submit"
-                  className="h-12 shrink-0 rounded-md bg-primary px-6 font-mono text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-                >
-                  Subscribe
-                </button>
-              </form>
-            )}
+                Subscribe on Substack
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <a
+                href={SUBSTACK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Read Sovereign Signal
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+            </div>
 
-            <p className="mt-4 font-mono text-xs text-muted-foreground">
-              Delivered every Friday at 09:00 UTC
+            <p className="mt-6 font-mono text-xs text-muted-foreground">
+              Powered by Substack
             </p>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Bitcoin, Brain, Code2 } from "lucide-react"
 
 const BEATS = [
@@ -8,6 +9,8 @@ const BEATS = [
       "DAO treasuries, governance proposals, ecosystem grants, and protocol incentive programs. From on-chain treasury flows to foundation RFPs.",
     color: "hsl(37, 90%, 55%)",
     tag: "@CryptoGrantWire",
+    xUrl: "https://x.com/CryptoGrantWire",
+    feedFilter: "crypto",
   },
   {
     icon: Brain,
@@ -16,6 +19,8 @@ const BEATS = [
       "Research grants, fellowships, hackathons, and compute credit programs. From safety research funding to GPU access and open-weight model bounties.",
     color: "hsl(200, 60%, 50%)",
     tag: "@AIGrantWire",
+    xUrl: "https://x.com/AIGrantWire",
+    feedFilter: "ai",
   },
   {
     icon: Code2,
@@ -24,6 +29,8 @@ const BEATS = [
       "Foundation grants, maintainer support funds, sponsorship matching, and contributor programs. Focused on long-term maintainer sustainability.",
     color: "hsl(145, 55%, 45%)",
     tag: "@OSSGrantWire",
+    xUrl: "https://x.com/OSSGrantWire",
+    feedFilter: "oss",
   },
 ]
 
@@ -45,8 +52,9 @@ export function BeatsSection() {
           {BEATS.map((beat) => {
             const Icon = beat.icon
             return (
-              <div
+              <Link
                 key={beat.title}
+                href={`/feed?beat=${beat.feedFilter}`}
                 className="group relative rounded-lg border border-border bg-card p-6 transition-colors hover:border-border/80 hover:bg-card/80"
               >
                 {/* Top accent line */}
@@ -66,12 +74,16 @@ export function BeatsSection() {
                       style={{ color: beat.color }}
                     />
                   </div>
-                  <span
-                    className="font-mono text-xs"
+                  <a
+                    href={beat.xUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-xs transition-colors hover:underline"
                     style={{ color: beat.color }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {beat.tag}
-                  </span>
+                  </a>
                 </div>
                 <h3 className="font-serif text-xl font-bold text-foreground">
                   {beat.title}
@@ -79,7 +91,7 @@ export function BeatsSection() {
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {beat.description}
                 </p>
-              </div>
+              </Link>
             )
           })}
         </div>

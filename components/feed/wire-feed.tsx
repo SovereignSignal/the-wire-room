@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import {
   Search,
   ArrowUpRight,
@@ -116,7 +117,9 @@ function FeedItem({ item }: { item: WireItem }) {
 }
 
 export function WireFeed() {
-  const [beatFilter, setBeatFilter] = useState<BeatFilter>("all")
+  const searchParams = useSearchParams()
+  const initialBeat = searchParams.get("beat") as BeatFilter | null
+  const [beatFilter, setBeatFilter] = useState<BeatFilter>(initialBeat && ["crypto", "ai", "oss"].includes(initialBeat) ? initialBeat : "all")
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)

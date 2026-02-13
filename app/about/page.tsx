@@ -155,52 +155,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Source Tiers */}
-        <section className="border-b border-border py-12 md:py-16">
-          <div className="mx-auto max-w-3xl px-4">
-            <h2 className="font-serif text-2xl font-bold text-foreground md:text-3xl">
-              Source Tier System
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              We classify every source by reliability. This helps readers
-              calibrate their expectations and plan accordingly.
-            </p>
-
-            <div className="mt-8 flex flex-col gap-4">
-              <div className="rounded-lg border border-border bg-card p-5">
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-bold text-primary">
-                    Tier 1
-                  </span>
-                  <h3 className="font-mono text-sm font-semibold text-foreground">
-                    Primary Sources
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Official announcements from foundations, DAOs, and
-                  organizations. Blog posts, governance proposals, and press
-                  releases directly from the source. Highest confidence level.
-                </p>
-              </div>
-              <div className="rounded-lg border border-border bg-card p-5">
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded border border-border px-2 py-0.5 font-mono text-xs font-bold text-muted-foreground">
-                    Tier 2
-                  </span>
-                  <h3 className="font-mono text-sm font-semibold text-foreground">
-                    Verified Secondary
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Information from reliable secondary sources — reputable
-                  journalists, well-known community members, or corroborated
-                  social media posts. Verified against at least one additional
-                  source.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* House Style */}
         <section className="border-b border-border py-12 md:py-16">

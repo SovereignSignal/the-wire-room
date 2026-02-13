@@ -21,6 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://the-wire-room-production.up.railway.app"),
   title: "The Wire Room",
   description:
     "Three beats. Real-time grants intelligence. Tracking grants, fellowships, and funding across Crypto, AI, and Open Source.",

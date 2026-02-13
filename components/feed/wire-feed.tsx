@@ -277,13 +277,15 @@ export function WireFeed() {
           <span className="font-mono text-xs text-muted-foreground">
             {filteredWires.length} wire{filteredWires.length !== 1 ? "s" : ""}
           </span>
-          <button
-            type="button"
+          <a
+            href="https://x.com/CryptoGrantWire"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-2 font-mono text-xs font-medium text-foreground transition-colors hover:bg-secondary/80"
           >
             <Send className="h-3 w-3" />
             Submit a Tip
-          </button>
+          </a>
         </div>
 
         {/* Feed */}

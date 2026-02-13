@@ -24,7 +24,20 @@ export const metadata: Metadata = {
   title: "The Wire Room",
   description:
     "Three beats. Real-time grants intelligence. Tracking grants, fellowships, and funding across Crypto, AI, and Open Source.",
-  generator: "v0.app",
+  openGraph: {
+    title: "The Wire Room",
+    description:
+      "Three beats. Real-time grants intelligence. Tracking grants, fellowships, and funding across Crypto, AI, and Open Source.",
+    url: "https://the-wire-room-production.up.railway.app",
+    siteName: "The Wire Room",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "The Wire Room",
+    description:
+      "Three beats. Real-time grants intelligence. Tracking grants, fellowships, and funding across Crypto, AI, and Open Source.",
+  },
 }
 
 export const viewport: Viewport = {

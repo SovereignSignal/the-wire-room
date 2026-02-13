@@ -89,9 +89,14 @@ export function SiteFooter() {
             </h4>
             <ul className="flex flex-col gap-2">
               <li>
-                <span className="text-sm text-muted-foreground">
+                <a
+                  href="https://sovereignsignal.substack.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-foreground transition-colors hover:text-primary"
+                >
                   Powered by Sovereign Signal
-                </span>
+                </a>
               </li>
             </ul>
           </div>

@@ -99,12 +99,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ wires, total: result.rowCount, hasSummaries })
   } catch (error) {
     console.error("Database error:", error)
-    const errorMessage = error instanceof Error ? error.message : "Unknown error"
-    return NextResponse.json({ 
-      error: "Failed to fetch wires", 
-      details: errorMessage,
-      hasDbUrl: !!process.env.DATABASE_URL 
-    }, { status: 500 })
+    return NextResponse.json({ error: "Failed to fetch wires" }, { status: 500 })
   }
 }
 

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/feed", label: "Wire Feed" },
-  { href: "/about", label: "About" },
+  { href: "/about", label: "Operating Manual" },
 ]
 
 export function SiteHeader() {

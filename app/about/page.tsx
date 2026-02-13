@@ -278,8 +278,7 @@ export default function AboutPage() {
                     Submit a Tip
                   </h4>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    DM any of our wire accounts on X or use the tip form in
-                    the feed.
+                    DM @CryptoGrantWire, @AIGrantWire, or @OSSGrantWire on X.
                   </p>
                 </div>
               </div>

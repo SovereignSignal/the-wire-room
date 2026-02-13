@@ -49,8 +49,7 @@ export async function GET(request: Request) {
           m.created_at,
           m.timestamp,
           s.title as summary_title,
-          s.summary as summary_text,
-          s.category as summary_category
+          s.summary as summary_text
         FROM messages m
         LEFT JOIN summaries s ON m.id = s.message_id
         WHERE m.wire IS NOT NULL
@@ -87,7 +86,7 @@ export async function GET(request: Request) {
       title: row.summary_title || extractTitle(row.raw_content || ""),
       summary: row.summary_text || extractSummary(row.raw_content || ""),
       beat: row.wire as "crypto" | "ai" | "oss",
-      category: mapCategory(row.summary_category) || detectCategory(row.raw_content || ""),
+      category: detectCategory(row.raw_content || ""),
       amount: extractAmount(row.raw_content || ""),
       deadline: extractDeadline(row.raw_content || ""),
       sourceUrl: row.extracted_urls?.[0] || "",

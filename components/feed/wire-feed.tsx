@@ -120,7 +120,7 @@ export function WireFeed() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)
-  const [wires, setWires] = useState<WireItem[]>(SAMPLE_WIRES) // Start with sample, replace with API
+  const [wires, setWires] = useState<WireItem[]>(SAMPLE_WIRES) // Start empty, populate from API
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export function WireFeed() {
         }
       } catch (error) {
         console.error("Failed to fetch wires:", error)
-        // Keep sample data on error
+        // Show empty state on error
       } finally {
         setLoading(false)
       }
@@ -278,13 +278,13 @@ export function WireFeed() {
             {filteredWires.length} wire{filteredWires.length !== 1 ? "s" : ""}
           </span>
           <a
-            href="https://x.com/CryptoGrantWire"
+            href={`https://x.com/${beatFilter === "ai" ? "AIGrantWire" : beatFilter === "oss" ? "OSSGrantWire" : "CryptoGrantWire"}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-2 font-mono text-xs font-medium text-foreground transition-colors hover:bg-secondary/80"
           >
             <Send className="h-3 w-3" />
-            Submit a Tip
+            Submit a Tip via @{beatFilter === "ai" ? "AIGrantWire" : beatFilter === "oss" ? "OSSGrantWire" : "CryptoGrantWire"}
           </a>
         </div>
 

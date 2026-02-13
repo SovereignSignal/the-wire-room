@@ -4,7 +4,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-5">
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2">
@@ -18,10 +18,10 @@ export function SiteFooter() {
             </p>
           </div>
 
-          {/* Wires */}
+          {/* Wires on X */}
           <div>
             <h4 className="mb-3 font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              The Wires
+              Wires on X
             </h4>
             <ul className="flex flex-col gap-2">
               <li>
@@ -57,7 +57,46 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* Navigation */}
+          {/* Wires on Telegram */}
+          <div>
+            <h4 className="mb-3 font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              Telegram
+            </h4>
+            <ul className="flex flex-col gap-2">
+              <li>
+                <a
+                  href="https://t.me/cryptograntwire"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-foreground transition-colors hover:text-primary"
+                >
+                  Crypto Grant Wire
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/aigrantwire"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-foreground transition-colors hover:text-primary"
+                >
+                  AI Grant Wire
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/ossgrantwire"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-foreground transition-colors hover:text-primary"
+                >
+                  OSS Grant Wire
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Navigation & Meta */}
           <div>
             <h4 className="mb-3 font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Navigation
@@ -79,15 +118,6 @@ export function SiteFooter() {
                   Operating Manual
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* Meta */}
-          <div>
-            <h4 className="mb-3 font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              Meta
-            </h4>
-            <ul className="flex flex-col gap-2">
               <li>
                 <a
                   href="https://sovereignsignal.substack.com"
@@ -95,7 +125,7 @@ export function SiteFooter() {
                   rel="noopener noreferrer"
                   className="text-sm text-foreground transition-colors hover:text-primary"
                 >
-                  Powered by Sovereign Signal
+                  Sovereign Signal
                 </a>
               </li>
             </ul>

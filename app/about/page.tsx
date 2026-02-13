@@ -50,7 +50,7 @@ export default function AboutPage() {
               What We Cover
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              We cover non-dilutive funding opportunities -- money you receive
+              We cover non-dilutive funding opportunities — money you receive
               without giving up equity or tokens. This includes grants,
               fellowships, hackathon prizes, governance-funded programs, and
               maintainer support funds.
@@ -192,7 +192,7 @@ export default function AboutPage() {
                   </h3>
                 </div>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  Information from reliable secondary sources -- reputable
+                  Information from reliable secondary sources — reputable
                   journalists, well-known community members, or corroborated
                   social media posts. Verified against at least one additional
                   source.
@@ -234,7 +234,7 @@ export default function AboutPage() {
                   {
                     rule: "Keep it actionable",
                     example:
-                      "Tell readers what the opportunity is, who it's for, and how to apply -- in three sentences or fewer.",
+                      "Tell readers what the opportunity is, who it's for, and how to apply — in three sentences or fewer.",
                   },
                   {
                     rule: "No editorializing",

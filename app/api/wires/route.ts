@@ -124,16 +124,6 @@ function extractSummary(content: string): string {
   return content.slice(0, 300)
 }
 
-function mapCategory(category: string | null): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" | null {
-  if (!category) return null
-  const lower = category.toLowerCase()
-  if (lower.includes("fellowship")) return "fellowship"
-  if (lower.includes("hackathon")) return "hackathon"
-  if (lower.includes("governance") || lower.includes("treasury")) return "governance"
-  if (lower.includes("incentive") || lower.includes("rewards")) return "incentives"
-  if (lower.includes("grant") || lower.includes("funding")) return "grants"
-  return "grants"
-}
 
 function detectCategory(content: string): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" {
   const lower = content.toLowerCase()

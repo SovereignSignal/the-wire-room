@@ -1,7 +1,36 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useEffect, useState } from "react"
+import { BEAT_CONFIG } from "@/lib/data"
 
 export function Hero() {
+  const [latestWire, setLatestWire] = useState<{
+    title: string
+    beat: "crypto" | "ai" | "oss"
+  } | null>(null)
+
+  useEffect(() => {
+    async function fetchLatest() {
+      try {
+        const res = await fetch("/api/wires?limit=1")
+        if (res.ok) {
+          const data = await res.json()
+          if (data.wires && data.wires.length > 0) {
+            setLatestWire({
+              title: data.wires[0].title,
+              beat: data.wires[0].beat,
+            })
+          }
+        }
+      } catch {
+        // Silently fail — hero still renders fine without it
+      }
+    }
+    fetchLatest()
+  }, [])
+
   return (
     <section className="relative overflow-hidden border-b border-border">
       {/* Ambient glow effect */}
@@ -49,17 +78,37 @@ export function Hero() {
           </Link>
         </div>
 
-        {/* Decorative wire element */}
+        {/* Latest wire ticker */}
         <div className="mt-16 border-t border-border pt-6">
-          <div className="flex items-center gap-4 overflow-hidden">
+          <Link
+            href="/feed"
+            className="group flex items-center gap-4 overflow-hidden"
+          >
             <span className="shrink-0 font-mono text-xs uppercase tracking-widest text-muted-foreground">
               Latest Wire
             </span>
-            <div className="h-px flex-1 bg-border" />
+            {latestWire ? (
+              <>
+                <span
+                  className="shrink-0 rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase"
+                  style={{
+                    backgroundColor: `${BEAT_CONFIG[latestWire.beat].color}18`,
+                    color: BEAT_CONFIG[latestWire.beat].color,
+                  }}
+                >
+                  {BEAT_CONFIG[latestWire.beat].label}
+                </span>
+                <span className="truncate text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                  {latestWire.title}
+                </span>
+              </>
+            ) : (
+              <div className="h-px flex-1 bg-border" />
+            )}
             <span className="shrink-0 font-mono text-xs text-primary">
               LIVE
             </span>
-          </div>
+          </Link>
         </div>
       </div>
     </section>

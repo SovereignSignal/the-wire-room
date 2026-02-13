@@ -30,8 +30,12 @@ export async function GET(request: Request) {
         m.raw_content,
         m.extracted_urls,
         m.created_at,
-        m.timestamp
+        m.timestamp,
+        s.title as summary_title,
+        s.summary as summary_text,
+        s.category as summary_category
       FROM messages m
+      LEFT JOIN summaries s ON m.id = s.message_id
       WHERE m.wire IS NOT NULL
     `
     const params: (string | number)[] = []
@@ -48,18 +52,18 @@ export async function GET(request: Request) {
 
     const result = await pool.query(query, params)
 
-    // Transform to WireItem format
+    // Transform to WireItem format - prefer summary table data when available
     const wires = result.rows.map((row) => ({
       id: row.id.toString(),
-      title: extractTitle(row.raw_content),
-      summary: extractSummary(row.raw_content),
+      title: row.summary_title || extractTitle(row.raw_content),
+      summary: row.summary_text || extractSummary(row.raw_content),
       beat: row.wire as "crypto" | "ai" | "oss",
-      category: detectCategory(row.raw_content),
+      category: mapCategory(row.summary_category) || detectCategory(row.raw_content),
       amount: extractAmount(row.raw_content),
       deadline: extractDeadline(row.raw_content),
       sourceUrl: row.extracted_urls?.[0] || "",
       sourceName: extractSourceName(row.raw_content),
-      tier: 1, // All TeleSum items are verified
+      tier: row.summary_title ? 1 : 2, // Tier 1 if has AI summary, Tier 2 otherwise
       publishedAt: row.created_at,
       telegramUrl: `https://t.me/${row.wire === "crypto" ? "cryptograntwire" : row.wire === "ai" ? "aigrantwire" : "ossgrantwire"}/${row.telegram_id}`,
     }))
@@ -93,6 +97,17 @@ function extractSummary(content: string): string {
     return lines.slice(1).join(" ").replace(/https?:\/\/\S+/g, "").trim().slice(0, 300)
   }
   return content.slice(0, 300)
+}
+
+function mapCategory(category: string | null): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" | null {
+  if (!category) return null
+  const lower = category.toLowerCase()
+  if (lower.includes("fellowship")) return "fellowship"
+  if (lower.includes("hackathon")) return "hackathon"
+  if (lower.includes("governance") || lower.includes("treasury")) return "governance"
+  if (lower.includes("incentive") || lower.includes("rewards")) return "incentives"
+  if (lower.includes("grant") || lower.includes("funding")) return "grants"
+  return "grants"
 }
 
 function detectCategory(content: string): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" {

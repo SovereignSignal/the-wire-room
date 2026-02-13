@@ -27,7 +27,7 @@ function FeedItem({ item }: { item: WireItem }) {
 
   return (
     <article className="border-b border-border p-5 transition-colors last:border-b-0 hover:bg-secondary/30">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         {/* Meta row */}
         <div className="flex flex-wrap items-center gap-2">
           <span
@@ -44,7 +44,7 @@ function FeedItem({ item }: { item: WireItem }) {
           </span>
           {item.tier === 1 && (
             <span className="rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary">
-              Tier 1
+              Verified
             </span>
           )}
           <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
@@ -58,10 +58,12 @@ function FeedItem({ item }: { item: WireItem }) {
           {item.title}
         </h3>
 
-        {/* Summary */}
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          {item.summary}
-        </p>
+        {/* Summary - more prominent */}
+        <div className="rounded-md border border-border/50 bg-secondary/30 p-4">
+          <p className="text-sm leading-relaxed text-foreground/90">
+            {item.summary}
+          </p>
+        </div>
 
         {/* Details row */}
         <div className="flex flex-wrap items-center gap-4">
@@ -82,15 +84,32 @@ function FeedItem({ item }: { item: WireItem }) {
               })}
             </span>
           )}
-          <a
-            href={item.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-sm text-primary transition-colors hover:text-primary/80"
-          >
-            {item.sourceName}
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </a>
+        </div>
+
+        {/* Links row - separate and more visible */}
+        <div className="flex flex-wrap items-center gap-3 border-t border-border/50 pt-3">
+          {item.sourceUrl && (
+            <a
+              href={item.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+            >
+              <ArrowUpRight className="h-3.5 w-3.5" />
+              {item.sourceName || "View Source"}
+            </a>
+          )}
+          {item.telegramUrl && (
+            <a
+              href={item.telegramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Send className="h-3.5 w-3.5" />
+              Telegram
+            </a>
+          )}
         </div>
       </div>
     </article>

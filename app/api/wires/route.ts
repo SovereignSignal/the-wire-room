@@ -22,24 +22,53 @@ export async function GET(request: Request) {
   const offset = parseInt(searchParams.get("offset") || "0")
 
   try {
-    let query = `
-      SELECT 
-        m.id,
-        m.telegram_id,
-        m.wire,
-        m.raw_content,
-        m.extracted_urls,
-        m.created_at,
-        m.timestamp,
-        s.title as summary_title,
-        s.summary as summary_text,
-        s.category as summary_category
-      FROM messages m
-      LEFT JOIN summaries s ON m.id = s.message_id
-      WHERE m.wire IS NOT NULL
-    `
+    // First, check if summaries table exists and get its structure
+    let hasSummaries = false
+    try {
+      const tableCheck = await pool.query(`
+        SELECT column_name FROM information_schema.columns 
+        WHERE table_name = 'summaries' LIMIT 1
+      `)
+      hasSummaries = tableCheck.rows.length > 0
+    } catch {
+      hasSummaries = false
+    }
+
+    let query: string
     const params: (string | number)[] = []
     let paramIndex = 1
+
+    if (hasSummaries) {
+      query = `
+        SELECT 
+          m.id,
+          m.telegram_id,
+          m.wire,
+          m.raw_content,
+          m.extracted_urls,
+          m.created_at,
+          m.timestamp,
+          s.title as summary_title,
+          s.summary as summary_text,
+          s.category as summary_category
+        FROM messages m
+        LEFT JOIN summaries s ON m.id = s.message_id
+        WHERE m.wire IS NOT NULL
+      `
+    } else {
+      query = `
+        SELECT 
+          m.id,
+          m.telegram_id,
+          m.wire,
+          m.raw_content,
+          m.extracted_urls,
+          m.created_at,
+          m.timestamp
+        FROM messages m
+        WHERE m.wire IS NOT NULL
+      `
+    }
 
     if (beat && ["crypto", "ai", "oss"].includes(beat)) {
       query += ` AND m.wire = $${paramIndex}`
@@ -55,20 +84,20 @@ export async function GET(request: Request) {
     // Transform to WireItem format - prefer summary table data when available
     const wires = result.rows.map((row) => ({
       id: row.id.toString(),
-      title: row.summary_title || extractTitle(row.raw_content),
-      summary: row.summary_text || extractSummary(row.raw_content),
+      title: row.summary_title || extractTitle(row.raw_content || ""),
+      summary: row.summary_text || extractSummary(row.raw_content || ""),
       beat: row.wire as "crypto" | "ai" | "oss",
-      category: mapCategory(row.summary_category) || detectCategory(row.raw_content),
-      amount: extractAmount(row.raw_content),
-      deadline: extractDeadline(row.raw_content),
+      category: mapCategory(row.summary_category) || detectCategory(row.raw_content || ""),
+      amount: extractAmount(row.raw_content || ""),
+      deadline: extractDeadline(row.raw_content || ""),
       sourceUrl: row.extracted_urls?.[0] || "",
-      sourceName: extractSourceName(row.raw_content),
+      sourceName: extractSourceName(row.raw_content || ""),
       tier: row.summary_title ? 1 : 2, // Tier 1 if has AI summary, Tier 2 otherwise
       publishedAt: row.created_at,
       telegramUrl: `https://t.me/${row.wire === "crypto" ? "cryptograntwire" : row.wire === "ai" ? "aigrantwire" : "ossgrantwire"}/${row.telegram_id}`,
     }))
 
-    return NextResponse.json({ wires, total: result.rowCount })
+    return NextResponse.json({ wires, total: result.rowCount, hasSummaries })
   } catch (error) {
     console.error("Database error:", error)
     const errorMessage = error instanceof Error ? error.message : "Unknown error"

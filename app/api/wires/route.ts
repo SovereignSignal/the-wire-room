@@ -18,8 +18,8 @@ pool.on("error", (err) => {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const beat = searchParams.get("beat") // crypto, ai, oss
-  const limit = parseInt(searchParams.get("limit") || "20")
-  const offset = parseInt(searchParams.get("offset") || "0")
+  const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "20") || 20, 1), 100)
+  const offset = Math.max(parseInt(searchParams.get("offset") || "0") || 0, 0)
 
   try {
     // First, check if summaries table exists and get its structure
@@ -85,7 +85,7 @@ export async function GET(request: Request) {
       id: row.id.toString(),
       title: row.summary_title || extractTitle(row.raw_content || ""),
       summary: row.summary_text || extractSummary(row.raw_content || ""),
-      beat: row.wire as "crypto" | "ai" | "oss",
+      beat: (["crypto", "ai", "oss"].includes(row.wire) ? row.wire : "crypto") as "crypto" | "ai" | "oss",
       category: detectCategory(
         (row.summary_title || "") + " " + (row.summary_text || "") + " " + (row.raw_content || "")
       ),

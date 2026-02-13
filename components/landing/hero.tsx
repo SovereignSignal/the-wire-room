@@ -5,7 +5,27 @@ import { ArrowRight } from "lucide-react"
 import { useEffect, useState } from "react"
 import { BEAT_CONFIG } from "@/lib/data"
 
+function useCurrentTimestamp() {
+  const [timestamp, setTimestamp] = useState("")
+  useEffect(() => {
+    const fmt = () => {
+      const now = new Date()
+      const month = now.toLocaleString("en-US", { month: "short", timeZone: "UTC" }).toUpperCase()
+      const day = String(now.getUTCDate()).padStart(2, "0")
+      const year = now.getUTCFullYear()
+      const hours = String(now.getUTCHours()).padStart(2, "0")
+      const mins = String(now.getUTCMinutes()).padStart(2, "0")
+      return `${month} ${day} ${year} -- ${hours}:${mins} UTC`
+    }
+    setTimestamp(fmt())
+    const id = setInterval(() => setTimestamp(fmt()), 60_000)
+    return () => clearInterval(id)
+  }, [])
+  return timestamp
+}
+
 export function Hero() {
+  const timestamp = useCurrentTimestamp()
   const [latestWire, setLatestWire] = useState<{
     title: string
     beat: "crypto" | "ai" | "oss"
@@ -106,7 +126,7 @@ export function Hero() {
               <div className="h-px flex-1 bg-border" />
             )}
             <span className="shrink-0 font-mono text-xs text-primary">
-              LIVE
+              {timestamp || "LIVE"}
             </span>
           </Link>
         </div>

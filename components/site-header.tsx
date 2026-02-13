@@ -49,6 +49,7 @@ export function SiteHeader() {
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground md:hidden"
+          aria-expanded={mobileMenuOpen}
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? (

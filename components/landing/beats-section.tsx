@@ -5,7 +5,7 @@ const BEATS = [
     icon: Bitcoin,
     title: "Crypto Grant Wire",
     description:
-      "DAO treasuries, governance proposals, ecosystem grants, and protocol incentive programs. We track every major crypto funding opportunity.",
+      "DAO treasuries, governance proposals, ecosystem grants, and protocol incentive programs. From on-chain treasury flows to foundation RFPs.",
     color: "hsl(37, 90%, 55%)",
     tag: "@CryptoGrantWire",
   },
@@ -13,7 +13,7 @@ const BEATS = [
     icon: Brain,
     title: "AI Grant Wire",
     description:
-      "Research grants, fellowships, hackathons, and compute credit programs. From foundation models to AI safety, we cover the full stack.",
+      "Research grants, fellowships, hackathons, and compute credit programs. From safety research funding to GPU access and open-weight model bounties.",
     color: "hsl(200, 60%, 50%)",
     tag: "@AIGrantWire",
   },
@@ -21,7 +21,7 @@ const BEATS = [
     icon: Code2,
     title: "OSS Grant Wire",
     description:
-      "Foundation grants, maintainer support funds, sponsorship matching, and contributor programs. Sustaining the open source ecosystem.",
+      "Foundation grants, maintainer support funds, sponsorship matching, and contributor programs. Focused on long-term maintainer sustainability.",
     color: "hsl(145, 55%, 45%)",
     tag: "@OSSGrantWire",
   },

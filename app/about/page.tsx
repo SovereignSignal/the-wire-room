@@ -15,7 +15,7 @@ import {
 export const metadata: Metadata = {
   title: "Operating Manual | The Wire Room",
   description:
-    "How The Wire Room works: our methodology, source tiers, verification process, and house style.",
+    "How The Wire Room works: the methodology, source tiers, verification process, and house style.",
 }
 
 export default function AboutPage() {
@@ -270,15 +270,31 @@ export default function AboutPage() {
               any of these channels.
             </p>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
               <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-5">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                 <div>
                   <h4 className="font-mono text-sm font-semibold text-foreground">
-                    Submit a Tip
+                    Submit a Tip on X
                   </h4>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    DM @CryptoGrantWire, @AIGrantWire, or @OSSGrantWire on X.
+                    DM{" "}
+                    <a href="https://x.com/CryptoGrantWire" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@CryptoGrantWire</a>,{" "}
+                    <a href="https://x.com/AIGrantWire" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@AIGrantWire</a>, or{" "}
+                    <a href="https://x.com/OSSGrantWire" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">@OSSGrantWire</a>.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-5">
+                <Send className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <div>
+                  <h4 className="font-mono text-sm font-semibold text-foreground">
+                    Telegram Channels
+                  </h4>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    <a href="https://t.me/cryptograntwire" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Crypto</a>,{" "}
+                    <a href="https://t.me/aigrantwire" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">AI</a>,{" "}
+                    <a href="https://t.me/ossgrantwire" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">OSS</a>
                   </p>
                 </div>
               </div>

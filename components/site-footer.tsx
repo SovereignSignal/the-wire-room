@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { Zap } from "lucide-react"
 
 export function SiteFooter() {
   return (
@@ -9,9 +8,7 @@ export function SiteFooter() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded bg-primary">
-                <Zap className="h-3.5 w-3.5 text-primary-foreground" />
-              </div>
+              <span className="text-xl" role="img" aria-label="satellite dish">📡</span>
               <span className="font-serif text-base font-bold text-foreground">
                 The Wire Room
               </span>

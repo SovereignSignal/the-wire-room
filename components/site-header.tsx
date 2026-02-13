@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
-import { Menu, X, Zap } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const NAV_LINKS = [
@@ -20,9 +20,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-primary">
-            <Zap className="h-4 w-4 text-primary-foreground" />
-          </div>
+          <span className="text-2xl" role="img" aria-label="satellite dish">📡</span>
           <span className="font-serif text-lg font-bold tracking-tight text-foreground">
             The Wire Room
           </span>

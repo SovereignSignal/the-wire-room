@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Radio } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 export function Hero() {
   return (
@@ -37,7 +37,7 @@ export function Hero() {
             href="/feed"
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            <Radio className="h-4 w-4" />
+            <span role="img" aria-label="satellite dish">📡</span>
             Read the Wires
           </Link>
           <Link
@@ -57,7 +57,7 @@ export function Hero() {
             </span>
             <div className="h-px flex-1 bg-border" />
             <span className="shrink-0 font-mono text-xs text-primary">
-              FEB 09 2026 -- 14:30 UTC
+              LIVE
             </span>
           </div>
         </div>

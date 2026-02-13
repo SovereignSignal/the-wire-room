@@ -7,7 +7,6 @@ import {
   Clock,
   DollarSign,
   Calendar,
-  Radio,
   Send,
   Filter,
   Loader2,
@@ -302,7 +301,7 @@ export function WireFeed() {
             ))
           ) : (
             <div className="flex flex-col items-center gap-3 py-16">
-              <Radio className="h-8 w-8 text-muted-foreground" />
+              <span className="text-3xl" role="img" aria-label="satellite dish">📡</span>
               <p className="font-mono text-sm text-muted-foreground">
                 No wires match your filters.
               </p>

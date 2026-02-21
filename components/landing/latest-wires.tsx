@@ -11,10 +11,10 @@ import {
   Loader2,
 } from "lucide-react"
 import {
-  SAMPLE_WIRES,
   BEAT_CONFIG,
   formatRelativeTime,
   formatDeadline,
+  fetchWires as fetchWiresFromApi,
   type WireItem,
 } from "@/lib/data"
 
@@ -65,15 +65,17 @@ function WireCard({ item }: { item: WireItem }) {
         </p>
 
         {/* Source link */}
-        <a
-          href={item.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-primary/80"
-        >
-          {item.sourceName}
-          <ArrowUpRight className="h-3.5 w-3.5" />
-        </a>
+        {item.sourceUrl && (
+          <a
+            href={item.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-sm text-primary transition-colors hover:text-primary/80"
+          >
+            {item.sourceName}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        )}
       </div>
     </article>
   )
@@ -81,26 +83,14 @@ function WireCard({ item }: { item: WireItem }) {
 
 export function LatestWires() {
   const [filter, setFilter] = useState<BeatFilter>("all")
-  const [wires, setWires] = useState<WireItem[]>(SAMPLE_WIRES)
+  const [wires, setWires] = useState<WireItem[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchWires() {
-      try {
-        const response = await fetch("/api/wires?limit=20")
-        if (response.ok) {
-          const data = await response.json()
-          if (Array.isArray(data.wires)) {
-            setWires(data.wires)
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch wires:", error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchWires()
+    fetchWiresFromApi(20)
+      .then(setWires)
+      .catch((err) => console.error("Failed to fetch wires:", err))
+      .finally(() => setLoading(false))
   }, [])
 
   const filteredWires =

@@ -42,14 +42,13 @@ export const BEAT_CONFIG = {
   },
 } as const
 
-// Empty array - components should show "no data" state when database unavailable
-// rather than displaying fabricated sample grants that undermine credibility
-export const SAMPLE_WIRES: WireItem[] = []
-
 export function formatRelativeTime(dateString: string): string {
   const date = new Date(dateString)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
+
+  if (diffMs < 0) return "Just now"
+
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
   const diffDays = Math.floor(diffHours / 24)
 
@@ -72,4 +71,11 @@ export function formatDeadline(deadline: string): string {
   }
   // Return raw text for non-date values like "Rolling", "TBD", etc.
   return deadline
+}
+
+export async function fetchWires(limit: number = 20): Promise<WireItem[]> {
+  const response = await fetch(`/api/wires?limit=${limit}`)
+  if (!response.ok) return []
+  const data = await response.json()
+  return Array.isArray(data.wires) ? data.wires : []
 }

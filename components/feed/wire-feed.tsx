@@ -13,10 +13,10 @@ import {
   Loader2,
 } from "lucide-react"
 import {
-  SAMPLE_WIRES,
   BEAT_CONFIG,
   formatRelativeTime,
   formatDeadline,
+  fetchWires as fetchWiresFromApi,
   type WireItem,
 } from "@/lib/data"
 
@@ -113,27 +113,14 @@ export function WireFeed() {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)
-  const [wires, setWires] = useState<WireItem[]>(SAMPLE_WIRES) // Start empty, populate from API
+  const [wires, setWires] = useState<WireItem[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function fetchWires() {
-      try {
-        const response = await fetch("/api/wires?limit=50")
-        if (response.ok) {
-          const data = await response.json()
-          if (Array.isArray(data.wires)) {
-            setWires(data.wires)
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch wires:", error)
-        // Show empty state on error
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchWires()
+    fetchWiresFromApi(50)
+      .then(setWires)
+      .catch((err) => console.error("Failed to fetch wires:", err))
+      .finally(() => setLoading(false))
   }, [])
 
   const filteredWires = useMemo(() => {

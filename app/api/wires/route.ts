@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server"
 import { Pool } from "pg"
 
-// Serverless-friendly pool configuration
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 1, // Limit connections in serverless
-  idleTimeoutMillis: 10000,
-  connectionTimeoutMillis: 5000,
-  ssl: process.env.DATABASE_URL?.includes('railway') ? { rejectUnauthorized: false } : false,
-})
+// Serverless-friendly pool with DATABASE_URL guard
+function createPool() {
+  const connectionString = process.env.DATABASE_URL
+  if (!connectionString) {
+    console.warn("DATABASE_URL not set - /api/wires will return empty results")
+    return null
+  }
+  return new Pool({
+    connectionString,
+    max: 1,
+    idleTimeoutMillis: 10000,
+    connectionTimeoutMillis: 5000,
+    ssl: connectionString.includes('railway') ? { rejectUnauthorized: false } : false,
+  })
+}
 
-// Graceful connection handling
-pool.on("error", (err) => {
+const pool = createPool()
+
+pool?.on("error", (err) => {
   console.error("Unexpected database error:", err)
 })
 
@@ -19,10 +27,16 @@ pool.on("error", (err) => {
 let tableExistsCache: boolean | null = null
 
 export async function GET(request: Request) {
+  if (!pool) {
+    return NextResponse.json({ wires: [], total: 0, count: 0 })
+  }
+
   const { searchParams } = new URL(request.url)
   const beat = searchParams.get("beat") // crypto, ai, oss
-  const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "20") || 20, 1), 100)
-  const offset = Math.max(parseInt(searchParams.get("offset") || "0") || 0, 0)
+  const rawLimit = Number(searchParams.get("limit"))
+  const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(Math.floor(rawLimit), 1), 100) : 20
+  const rawOffset = Number(searchParams.get("offset"))
+  const offset = Number.isFinite(rawOffset) && rawOffset >= 0 ? Math.floor(rawOffset) : 0
 
   try {
     // Check if scan_entries table exists (cached after first successful check)
@@ -82,7 +96,7 @@ export async function GET(request: Request) {
       title: row.name,
       summary: row.description || "",
       beat: (["crypto", "ai", "oss"].includes(row.wire) ? row.wire : "crypto") as "crypto" | "ai" | "oss",
-      category: detectCategory(row.name + " " + (row.description || "")),
+      category: detectCategory(row.name, row.description),
       amount: row.amount || undefined,
       deadline: row.deadline || undefined,
       sourceUrl: row.source_url,
@@ -92,7 +106,14 @@ export async function GET(request: Request) {
       qualityScore: row.quality_score ?? undefined,
     }))
 
-    return NextResponse.json({ wires, total, count: wires.length })
+    return NextResponse.json(
+      { wires, total, count: wires.length },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+        },
+      }
+    )
   } catch (error) {
     tableExistsCache = null // Reset cache on error so next request re-checks
     console.error("Database error:", error)
@@ -100,8 +121,8 @@ export async function GET(request: Request) {
   }
 }
 
-function detectCategory(content: string): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" {
-  const lower = content.toLowerCase()
+function detectCategory(name: string, description?: string): "grants" | "fellowship" | "hackathon" | "governance" | "incentives" {
+  const lower = `${name} ${description || ""}`.toLowerCase()
 
   // Hackathon detection (check before grants since hackathons may also mention "prizes")
   if (
@@ -145,25 +166,32 @@ function detectCategory(content: string): "grants" | "fellowship" | "hackathon" 
   return "grants"
 }
 
+const X_SYSTEM_ROUTES = new Set(["i", "explore", "search", "settings", "home", "compose", "messages"])
+
 function extractSourceName(sourceUrl: string, name: string): string {
-  if (!sourceUrl) return name.split(":")[0].trim() || "Wire Room"
+  if (!sourceUrl) return fallbackSourceName(name)
 
   try {
     const url = new URL(sourceUrl)
     const hostname = url.hostname.replace(/^www\./, "")
 
-    // X.com / Twitter — extract @handle from URL path
     if (hostname === "x.com" || hostname === "twitter.com") {
-      const handle = url.pathname.split("/")[1]
-      if (handle) return `@${handle}`
+      const pathSegment = url.pathname.split("/")[1]
+      if (pathSegment && !X_SYSTEM_ROUTES.has(pathSegment.toLowerCase())) {
+        return `@${pathSegment.slice(0, 30)}`
+      }
+      return "X.com"
     }
 
-    // Clean domain → display name (e.g. "gitcoin.co" → "Gitcoin")
     const domainParts = hostname.split(".")
     const baseDomain = domainParts.length >= 2 ? domainParts[domainParts.length - 2] : domainParts[0]
     return baseDomain.charAt(0).toUpperCase() + baseDomain.slice(1)
   } catch {
-    // Fallback: first word of name before ":"
-    return name.split(":")[0].trim() || "Wire Room"
+    return fallbackSourceName(name)
   }
+}
+
+function fallbackSourceName(name: string): string {
+  const segment = name.split(":")[0].trim()
+  return segment.length > 0 && segment.length <= 40 ? segment : "Wire Room"
 }

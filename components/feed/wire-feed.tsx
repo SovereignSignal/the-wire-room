@@ -16,6 +16,7 @@ import {
   SAMPLE_WIRES,
   BEAT_CONFIG,
   formatRelativeTime,
+  formatDeadline,
   type WireItem,
 } from "@/lib/data"
 
@@ -47,6 +48,11 @@ function FeedItem({ item }: { item: WireItem }) {
               Verified
             </span>
           )}
+          {item.qualityScore != null && (
+            <span className="rounded bg-secondary px-2 py-0.5 font-mono text-xs text-muted-foreground">
+              Score: {item.qualityScore}
+            </span>
+          )}
           <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />
             {formatRelativeTime(item.publishedAt)}
@@ -76,12 +82,7 @@ function FeedItem({ item }: { item: WireItem }) {
           {item.deadline && (
             <span className="flex items-center gap-1.5 font-mono text-sm text-muted-foreground">
               <Calendar className="h-3.5 w-3.5" />
-              Deadline:{" "}
-              {new Date(item.deadline).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
+              Deadline: {formatDeadline(item.deadline)}
             </span>
           )}
         </div>
@@ -97,17 +98,6 @@ function FeedItem({ item }: { item: WireItem }) {
             >
               <ArrowUpRight className="h-3.5 w-3.5" />
               {item.sourceName || "View Source"}
-            </a>
-          )}
-          {item.telegramUrl && (
-            <a
-              href={item.telegramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <Send className="h-3.5 w-3.5" />
-              Telegram
             </a>
           )}
         </div>

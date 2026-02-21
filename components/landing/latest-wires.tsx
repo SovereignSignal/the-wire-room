@@ -14,6 +14,7 @@ import {
   SAMPLE_WIRES,
   BEAT_CONFIG,
   formatRelativeTime,
+  formatDeadline,
   type WireItem,
 } from "@/lib/data"
 
@@ -48,10 +49,7 @@ function WireCard({ item }: { item: WireItem }) {
           {item.deadline && (
             <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
               <Calendar className="h-3 w-3" />
-              {new Date(item.deadline).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-              })}
+              {formatDeadline(item.deadline)}
             </span>
           )}
         </div>

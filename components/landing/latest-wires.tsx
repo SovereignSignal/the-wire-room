@@ -90,7 +90,7 @@ export function LatestWires() {
         const response = await fetch("/api/wires?limit=20")
         if (response.ok) {
           const data = await response.json()
-          if (data.wires && data.wires.length > 0) {
+          if (Array.isArray(data.wires)) {
             setWires(data.wires)
           }
         }

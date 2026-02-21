@@ -15,6 +15,9 @@ pool.on("error", (err) => {
   console.error("Unexpected database error:", err)
 })
 
+// Cache table existence check across warm invocations
+let tableExistsCache: boolean | null = null
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const beat = searchParams.get("beat") // crypto, ai, oss
@@ -22,19 +25,20 @@ export async function GET(request: Request) {
   const offset = Math.max(parseInt(searchParams.get("offset") || "0") || 0, 0)
 
   try {
-    // Check if scan_entries table exists
-    let hasScanEntries = false
-    try {
-      const tableCheck = await pool.query(`
-        SELECT column_name FROM information_schema.columns
-        WHERE table_name = 'scan_entries' LIMIT 1
-      `)
-      hasScanEntries = tableCheck.rows.length > 0
-    } catch {
-      hasScanEntries = false
+    // Check if scan_entries table exists (cached after first successful check)
+    if (tableExistsCache === null) {
+      try {
+        const tableCheck = await pool.query(`
+          SELECT 1 FROM information_schema.columns
+          WHERE table_name = 'scan_entries' LIMIT 1
+        `)
+        tableExistsCache = tableCheck.rows.length > 0
+      } catch {
+        tableExistsCache = false
+      }
     }
 
-    if (!hasScanEntries) {
+    if (!tableExistsCache) {
       return NextResponse.json({ wires: [], total: 0, count: 0 })
     }
 
@@ -90,6 +94,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ wires, total, count: wires.length })
   } catch (error) {
+    tableExistsCache = null // Reset cache on error so next request re-checks
     console.error("Database error:", error)
     return NextResponse.json({ error: "Failed to fetch wires" }, { status: 500 })
   }

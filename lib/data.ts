@@ -67,6 +67,7 @@ export function formatDeadline(deadline: string): string {
       month: "short",
       day: "numeric",
       year: "numeric",
+      timeZone: "UTC",
     })
   }
   // Return raw text for non-date values like "Rolling", "TBD", etc.
